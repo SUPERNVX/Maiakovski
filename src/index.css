@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #1A1410;
+  --color-espresso: #3B2417;
+  --color-sienna: #7A5332;
+  --color-umber: #8C7560;
+  --color-parchment: #F5EFE7;
+  --color-cream: #F3E6D0;
+  --color-ivory: #F8EBD7;
+  --color-soviet: #B22222;
+  --color-soviet-dark: #8B0000;
+  --color-soviet-light: #D43030;
+  --color-usa: #1E5AA8;
+  --color-usa-dark: #0D3B6F;
+  --color-usa-light: #3A7BD5;
+  --color-gold: #C4960C;
+  --color-gold-light: #DAA520;
+  --font-display: "Dirtyline36Daysoftype2022", "Inter", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+@font-face {
+  font-family: "Dirtyline36Daysoftype2022";
+  src: url("/fonts/Dirtyline36Daysoftype2022/woff/Dirtyline 36daysoftype 2022.woff2") format("woff2"),
+       url("/fonts/Dirtyline36Daysoftype2022/woff/Dirtyline 36daysoftype 2022.woff") format("woff"),
+       url("/fonts/Dirtyline36Daysoftype2022/woff/Dirtyline 36daysoftype 2022.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html {
+    scroll-behavior: smooth;
+    background-color: #1A1410;
+    color: #8C7560;
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body { min-height: 100vh; background: #1A1410; }
+  ::selection { background: rgba(178, 34, 34, 0.35); color: #F5EFE7; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #1A1410; }
+  ::-webkit-scrollbar-thumb { background: #7A5332; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #8C7560; }
+}
+
+@layer components {
+  .grain-overlay {
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    opacity: 0.035; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 200px;
+    animation: grain 8s steps(10) infinite;
+  }
+  .text-display { font-family: "Dirtyline36Daysoftype2022", sans-serif; line-height: 0.92; letter-spacing: -0.02em; }
+  .text-display-size { font-size: clamp(3rem, 1.5rem + 7vw, 9rem); }
+  .text-display-sm { font-size: clamp(2rem, 1rem + 3vw, 4.5rem); }
+  .text-label { font-family: "Inter", sans-serif; font-weight: 600; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .text-body { font-family: "Inter", sans-serif; font-weight: 300; font-size: clamp(0.9rem, 0.85rem + 0.15vw, 1.05rem); line-height: 1.8; }
+  .col-prose { max-width: 42rem; margin-left: auto; margin-right: auto; }
+  .section-dark { background-color: #1A1410; color: #F5EFE7; }
+  .section-mid { background-color: #3B2417; color: #F5EFE7; }
+  .section-light { background-color: #F5EFE7; color: #1A1410; }
+  .section-warm { background-color: #F3E6D0; color: #1A1410; }
+  .placeholder-image {
+    background: linear-gradient(135deg, rgba(122,83,50,0.15), rgba(140,117,96,0.1));
+    border: 1px dashed rgba(140,117,96,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: #8C7560; font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.2em; font-weight: 500;
+  }
+  .section-light .placeholder-image {
+    background: linear-gradient(135deg, rgba(26,20,16,0.06), rgba(26,20,16,0.03));
+    border-color: rgba(26,20,16,0.15); color: rgba(26,20,16,0.4);
+  }
+  .placeholder-video {
+    background: linear-gradient(135deg, #1A1410, #2a2218);
+    border: 1px dashed rgba(140,117,96,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: #7A5332; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em;
+  }
+  .divider-gold { width: 4rem; height: 1px; background: linear-gradient(90deg, transparent, #C4960C, transparent); }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(7%, -25%); }
+  50% { transform: translate(-15%, 10%); }
+  70% { transform: translate(0%, 15%); }
+  90% { transform: translate(-10%, 10%); }
+}
