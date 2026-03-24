@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn, getAssetPath } from "../../lib/utils";
 
 export const MaskContainer = ({
   children,
@@ -40,8 +40,12 @@ export const MaskContainer = ({
       style={{ backgroundColor: "#3B2417" }}
     >
       <motion.div
-        className="absolute inset-0 flex items-center justify-center z-10 [mask-image:url(/Maiakovski/mask.svg)] [mask-repeat:no-repeat] [mask-size:40px]"
-        style={{ backgroundColor: "#1A1410" }}
+        className="absolute inset-0 flex items-center justify-center z-10 [mask-repeat:no-repeat] [mask-size:40px]"
+        style={{ 
+          backgroundColor: "#1A1410",
+          maskImage: `url(${getAssetPath("/mask.svg")})`,
+          WebkitMaskImage: `url(${getAssetPath("/mask.svg")})`
+        }}
         animate={{
           maskPosition: `${mousePosition.x - maskSize / 2}px ${mousePosition.y - maskSize / 2}px`,
           maskSize: `${maskSize}px`,
