@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState, useMemo } from 'react';
 
 interface PosterItem {
   id: string; image: string; title: string; officialName: string; meaning: string; purpose: string; flag: 'ussr' | 'usa';
@@ -25,19 +25,20 @@ const symbolData = { image: '/URSS/Simbolo%20URSS.webp',
   purpose: 'Simbolizar a uniao das duas classes trabalhadoras. Um dos icones mais reconheciveis do seculo XX.'
 };
 
-const StickyScroll = forwardRef<HTMLElement, {}>((_, ref) => {
+const StickyScroll = forwardRef<HTMLElement>((_, ref) => {
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const ussrLeft = posters.filter(p => p.flag === 'ussr');
-  const usaRight = posters.filter(p => p.flag === 'usa');
+  const ussrLeft = useMemo(() => posters.filter(p => p.flag === 'ussr' && !['atraves', 'reptil'].includes(p.id)), []);
+  const usaRight = useMemo(() => posters.filter(p => p.flag === 'usa' && !['unclesam', 'rosie'].includes(p.id)), []);
 
-  const getOverlayData = () => {
-    if (!expanded) return null;
-    if (expanded === 'symbol') return symbolData;
-    return posters.find(p => p.id === expanded) || null;
-  };
+  const overlayMap = useMemo(() => {
+    const map = new Map<string, PosterItem | typeof symbolData>();
+    posters.forEach(p => map.set(p.id, p));
+    map.set('symbol', symbolData);
+    return map;
+  }, []);
 
-  const overlay = getOverlayData();
+  const overlay = expanded ? overlayMap.get(expanded) || null : null;
 
   return (
     <main ref={ref} className="relative">
@@ -46,7 +47,7 @@ const StickyScroll = forwardRef<HTMLElement, {}>((_, ref) => {
           <motion.div key="ov" className="fixed inset-0 z-40 bg-ink/80 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setExpanded(null)}>
             <motion.div className="absolute inset-4 md:inset-8 lg:inset-16 flex flex-col md:flex-row gap-6 md:gap-12 items-center" onClick={e => e.stopPropagation()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
               <div className="w-full md:w-1/2 h-1/2 md:h-full rounded-lg overflow-hidden">
-                <img src={overlay.image} alt={overlay.title} className="w-full h-full object-cover" />
+                <img src={overlay.image} alt={overlay.title} loading="eager" fetchPriority="high" className="w-full h-full object-cover" />
               </div>
               <motion.div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center overflow-y-auto pr-4" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15, duration: 0.4 }}>
                 <h3 className="text-display text-display-sm text-parchment mb-2">{overlay.title}</h3>
@@ -62,13 +63,13 @@ const StickyScroll = forwardRef<HTMLElement, {}>((_, ref) => {
         )}
       </AnimatePresence>
 
-      <section className="w-full px-4 md:px-8 pb-24">
+      <section className="w-full px-4 md:px-8 pb-32">
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-4">
           <div className="col-span-12 md:col-span-4 grid gap-4">
             {ussrLeft.map((p) => (
-              <figure key={p.id} className="group relative cursor-pointer" style={{ contentVisibility: "auto" }} onClick={() => setExpanded(p.id)}>
+              <figure key={p.id} className="group relative cursor-pointer" style={{ contentVisibility: "auto", containIntrinsicSize: "300px 424px" }} onClick={() => setExpanded(p.id)}>
                 <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
-                  <img src={p.image} alt={p.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <img src={p.image} alt={p.title} loading="lazy" decoding="async" width={300} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-500" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                     <span className="text-label text-parchment/70 block">CLIQUE PARA EXPANDIR</span>
@@ -81,23 +82,23 @@ const StickyScroll = forwardRef<HTMLElement, {}>((_, ref) => {
           </div>
 
           <div className="col-span-12 md:col-span-4 md:sticky md:top-6 md:h-[calc(100vh-48px)] grid grid-cols-2 gap-4">
-            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" onClick={() => setExpanded('atraves')}>
-              <img src="/URSS/Atrav%C3%A9s%20dos%20Mundos%20e%20Eras.webp" alt="Atraves dos Mundos" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" style={{ contentVisibility: "auto", containIntrinsicSize: "150px 200px" }} onClick={() => setExpanded('atraves')}>
+              <img src="/URSS/Atrav%C3%A9s%20dos%20Mundos%20e%20Eras.webp" alt="Atraves dos Mundos" loading="lazy" decoding="async" width={300} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4"><span className="text-display text-xs text-parchment block">Atraves dos Mundos</span><span className="text-label text-parchment/40 mt-1 block">Era Espacial URSS</span></div>
             </figure>
-            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" onClick={() => setExpanded('unclesam')}>
-              <img src="/EUA/Eu%20quero%20voc%C3%AA%20para%20o%20Ex%C3%A9rcito%20dos%20EUA.webp" alt="Uncle Sam" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" style={{ contentVisibility: "auto", containIntrinsicSize: "150px 200px" }} onClick={() => setExpanded('unclesam')}>
+              <img src="/EUA/Eu%20quero%20voc%C3%AA%20para%20o%20Ex%C3%A9rcito%20dos%20EUA.webp" alt="Uncle Sam" loading="lazy" decoding="async" width={300} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4"><span className="text-display text-xs text-parchment block">I Want You</span><span className="text-label text-parchment/40 mt-1 block">Recrutamento EUA</span></div>
             </figure>
-            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" onClick={() => setExpanded('reptil')}>
-              <img src="/URSS/Esmague%20o%20R%C3%A9ptil%20Fascista!.webp" alt="Esmague o Reptil" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" style={{ contentVisibility: "auto", containIntrinsicSize: "150px 200px" }} onClick={() => setExpanded('reptil')}>
+              <img src="/URSS/Esmague%20o%20R%C3%A9ptil%20Fascista!.webp" alt="Esmague o Reptil" loading="lazy" decoding="async" width={300} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4"><span className="text-display text-xs text-parchment block">Esmague o Reptil</span><span className="text-label text-parchment/40 mt-1 block">Grande Guerra Patriotica</span></div>
             </figure>
-            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" onClick={() => setExpanded('rosie')}>
-              <img src="/EUA/N%C3%B3s%20conseguimos!.webp" alt="Rosie" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <figure className="relative aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group" style={{ contentVisibility: "auto", containIntrinsicSize: "150px 200px" }} onClick={() => setExpanded('rosie')}>
+              <img src="/EUA/N%C3%B3s%20conseguimos!.webp" alt="Rosie" loading="lazy" decoding="async" width={300} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4"><span className="text-display text-xs text-parchment block">We Can Do It!</span><span className="text-label text-parchment/40 mt-1 block">Rosie the Riveter</span></div>
             </figure>
@@ -105,9 +106,9 @@ const StickyScroll = forwardRef<HTMLElement, {}>((_, ref) => {
 
           <div className="col-span-12 md:col-span-4 grid gap-4">
             {usaRight.map((p) => (
-              <figure key={p.id} className="group relative cursor-pointer" onClick={() => setExpanded(p.id)}>
+              <figure key={p.id} className="group relative cursor-pointer" style={{ contentVisibility: "auto", containIntrinsicSize: "300px 424px" }} onClick={() => setExpanded(p.id)}>
                 <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
-                  <img src={p.image} alt={p.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <img src={p.image} alt={p.title} loading="lazy" decoding="async" width={300} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-500" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                     <span className="text-label text-parchment/70 block">CLIQUE PARA EXPANDIR</span>

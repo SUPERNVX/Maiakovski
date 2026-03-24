@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 
 interface ScrollExpandMediaProps {
@@ -27,59 +27,142 @@ const ScrollExpandHero = ({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showContent, setShowContent] = useState(false);
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState(false);
-  const [touchStartY, setTouchStartY] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  
+  // Refs para valores atualizados sem recriar handlers
+  const scrollProgressRef = useRef(scrollProgress);
+  const mediaFullyExpandedRef = useRef(mediaFullyExpanded);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastWheelTimeRef = useRef(0);
 
   useEffect(() => {
-    setScrollProgress(0);
-    setShowContent(false);
-    setMediaFullyExpanded(false);
+    scrollProgressRef.current = scrollProgress;
+  }, [scrollProgress]);
+
+  useEffect(() => {
+    mediaFullyExpandedRef.current = mediaFullyExpanded;
+  }, [mediaFullyExpanded]);
+
+  // Reset state quando mediaType mudar - necessario para sincronizar com estado externo
+  useEffect(() => {
+    const timer = requestAnimationFrame(() => {
+      setScrollProgress(0);
+      setShowContent(false);
+      setMediaFullyExpanded(false);
+    });
+    return () => cancelAnimationFrame(timer);
   }, [mediaType]);
 
-  useEffect(() => {
-    const handleWheel = (e: globalThis.WheelEvent) => {
-      if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false);
-        e.preventDefault();
-      } else if (!mediaFullyExpanded) {
-        e.preventDefault();
+  // Handler de wheel com throttle manual via requestAnimationFrame
+  const handleWheel = useCallback((e: WheelEvent) => {
+    const now = Date.now();
+    const throttleLimit = 16; // ~60fps
+    
+    if (now - lastWheelTimeRef.current < throttleLimit) {
+      return;
+    }
+    lastWheelTimeRef.current = now;
+
+    const currentExpanded = mediaFullyExpandedRef.current;
+    const currentProgress = scrollProgressRef.current;
+
+    if (currentExpanded && e.deltaY < 0 && window.scrollY <= 5) {
+      setMediaFullyExpanded(false);
+    } else if (!currentExpanded) {
+      e.preventDefault();
+      
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      
+      animationFrameRef.current = requestAnimationFrame(() => {
         const scrollDelta = e.deltaY * 0.0009;
-        const newProgress = Math.min(Math.max(scrollProgress + scrollDelta, 0), 1);
+        const newProgress = Math.min(Math.max(currentProgress + scrollDelta, 0), 1);
         setScrollProgress(newProgress);
-        if (newProgress >= 1) { setMediaFullyExpanded(true); setShowContent(true); }
-        else if (newProgress < 0.75) setShowContent(false);
+        
+        if (newProgress >= 1) {
+          setMediaFullyExpanded(true);
+          setShowContent(true);
+        } else if (newProgress < 0.75) {
+          setShowContent(false);
+        }
+        animationFrameRef.current = null;
+      });
+    }
+  }, []);
+
+  // Handler de touch
+  const touchStartYRef = useRef<number | null>(null);
+  const lastTouchTimeRef = useRef(0);
+
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    touchStartYRef.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    const now = Date.now();
+    const throttleLimit = 16;
+    
+    if (now - lastTouchTimeRef.current < throttleLimit) {
+      return;
+    }
+    lastTouchTimeRef.current = now;
+
+    if (touchStartYRef.current === null) return;
+    
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchStartYRef.current - touchY;
+    const currentExpanded = mediaFullyExpandedRef.current;
+    const currentProgress = scrollProgressRef.current;
+
+    if (currentExpanded && deltaY < -20 && window.scrollY <= 5) {
+      setMediaFullyExpanded(false);
+      e.preventDefault();
+    } else if (!currentExpanded) {
+      e.preventDefault();
+      
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
-    };
-    const handleTouchStart = (e: globalThis.TouchEvent) => setTouchStartY(e.touches[0].clientY);
-    const handleTouchMove = (e: globalThis.TouchEvent) => {
-      if (!touchStartY) return;
-      const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
-      if (mediaFullyExpanded && deltaY < -20 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false); e.preventDefault();
-      } else if (!mediaFullyExpanded) {
-        e.preventDefault();
+      
+      animationFrameRef.current = requestAnimationFrame(() => {
         const scrollDelta = deltaY * (deltaY < 0 ? 0.008 : 0.005);
-        const newProgress = Math.min(Math.max(scrollProgress + scrollDelta, 0), 1);
+        const newProgress = Math.min(Math.max(currentProgress + scrollDelta, 0), 1);
         setScrollProgress(newProgress);
-        if (newProgress >= 1) { setMediaFullyExpanded(true); setShowContent(true); }
-        else if (newProgress < 0.75) setShowContent(false);
-        setTouchStartY(touchY);
+        
+        if (newProgress >= 1) {
+          setMediaFullyExpanded(true);
+          setShowContent(true);
+        } else if (newProgress < 0.75) {
+          setShowContent(false);
+        }
+        touchStartYRef.current = touchY;
+        animationFrameRef.current = null;
+      });
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    touchStartYRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd);
+    
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     };
-    const opts: AddEventListenerOptions = { passive: false };
-    window.addEventListener("wheel", handleWheel as EventListener, opts);
-    window.addEventListener("touchstart", handleTouchStart as EventListener, opts);
-    window.addEventListener("touchmove", handleTouchMove as EventListener, opts);
-    window.addEventListener("touchend", (() => setTouchStartY(0)) as EventListener);
-    return () => {
-      window.removeEventListener("wheel", handleWheel as EventListener);
-      window.removeEventListener("touchstart", handleTouchStart as EventListener);
-      window.removeEventListener("touchmove", handleTouchMove as EventListener);
-      window.removeEventListener("touchend", (() => setTouchStartY(0)) as EventListener);
-    };
-  }, [scrollProgress, mediaFullyExpanded, touchStartY]);
+  }, [handleWheel, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -88,9 +171,13 @@ const ScrollExpandHero = ({
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const w = 300 + scrollProgress * (isMobile ? 650 : 1250);
-  const h = 400 + scrollProgress * (isMobile ? 200 : 400);
-  const tx = scrollProgress * (isMobile ? 180 : 150);
+  const { w, h, tx } = useMemo(() => {
+    const w = 300 + scrollProgress * (isMobile ? 650 : 1250);
+    const h = 400 + scrollProgress * (isMobile ? 200 : 400);
+    const tx = scrollProgress * (isMobile ? 180 : 150);
+    return { w, h, tx };
+  }, [scrollProgress, isMobile]);
+
   const firstWord = title ? title.split(" ")[0] : "";
   const rest = title ? title.split(" ").slice(1).join(" ") : "";
 
@@ -98,7 +185,7 @@ const ScrollExpandHero = ({
     <div ref={sectionRef} className="overflow-x-hidden">
       <section className="relative flex flex-col items-center min-h-[100dvh]">
         <motion.div className="absolute inset-0 z-0" initial={{ opacity: 0 }} animate={{ opacity: 1 - scrollProgress }}>
-          {bgImageSrc ? <img src={bgImageSrc} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-ink" />}
+          {bgImageSrc ? <img src={bgImageSrc} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-ink" />}
           <div className="absolute inset-0 bg-black/40" />
         </motion.div>
         <div className="container mx-auto relative z-10 flex flex-col items-center">
@@ -117,7 +204,7 @@ const ScrollExpandHero = ({
                   </div>
                 )
               ) : (
-                mediaSrc ? <img src={mediaSrc} alt={title || ""} className="w-full h-full object-cover rounded-xl" /> : <div className="placeholder-image w-full h-full rounded-xl">IMAGE PLACEHOLDER</div>
+                mediaSrc ? <img src={mediaSrc} alt={title || ""} loading="lazy" decoding="async" className="w-full h-full object-cover rounded-xl" /> : <div className="placeholder-image w-full h-full rounded-xl">IMAGE PLACEHOLDER</div>
               )}
             </div>
             <div className={"flex items-center justify-center text-center relative z-10 flex-col" + (textBlend ? " mix-blend-difference" : "")}>

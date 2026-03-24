@@ -34,13 +34,6 @@ const LegadoSection = () => {
           <div><h4 className="text-label text-parchment/80 mb-3">Como Fazer Arte Revolucionaria?</h4><p className="text-body text-parchment/50">Capitalismo e maquina de absorcao. Qualquer critica pode virar mercadoria. Revolucao vira slogan de campanha publicitaria.</p></div>
         </div>
       </div>
-      <div className="py-32 md:py-48 px-8 md:px-16 lg:px-24 text-center">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1.5 }}>
-          <p className="text-display text-display-size text-parchment max-w-5xl mx-auto leading-tight mb-12">A verdadeira arte revolucionaria nao serve a nenhum poder.</p>
-          <div className="divider-gold mx-auto mb-12" />
-          <p className="text-body text-parchment/40 max-w-lg mx-auto">95 anos apos sua morte, ainda falamos dele. Quantos confortaveis de 1930 voce conhece?</p>
-        </motion.div>
-      </div>
       <div className="py-24 px-8 md:px-16 lg:px-24">
         <span className="text-label text-gold block mb-6">SECAO 04.4</span>
         <h3 className="text-display text-display-sm text-parchment mb-12">Referencias</h3>
@@ -51,8 +44,7 @@ const LegadoSection = () => {
           <p>NYE, Joseph S. Soft Power: The Means to Success in World Politics. New York: PublicAffairs, 2004.</p>
         </div>
         <div className="mt-24 text-center"><p className="text-label text-parchment/20">Colegio Santa Ines — Sao Paulo — Marco 2026</p></div>
-      </div>
-    </section>
+      </div>    </section>
   );
 };
 export default LegadoSection;
