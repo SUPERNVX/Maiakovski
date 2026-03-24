@@ -5,74 +5,53 @@ const SoftPowerSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <section id="softpower" className="section-mid">
+    <section id="soft-power" className="section-dark">
       <div className="py-24 md:py-32 px-8 md:px-16 lg:px-24">
         <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 1 }}>
-          <span className="text-label text-gold block mb-6">SECAO 03</span>
-          <h2 className="text-display text-display-size text-parchment max-w-5xl">Soft Power<br />e Resistencia</h2>
+          <span className="text-label text-gold block mb-6">SEÇÃO 03</span>
+          <h2 className="text-display text-display-size text-parchment max-w-5xl">Soft Power e<br />Resistência</h2>
         </motion.div>
       </div>
-      
-      <div className="px-8 md:px-16 lg:px-24 pb-24 col-prose">
-        <div className="mb-20">
-          <h3 className="text-display text-display-sm text-parchment mb-6 uppercase tracking-tighter">Hard Power</h3>
-          <p className="text-label text-soviet-light mb-4">PODER DURO / COERCAO</p>
-          <p className="text-body text-parchment/60 leading-relaxed">
-            Forca militar direta. Coercao economica. Ameacas e pressao soberana. 
-            Onde o imperio se impoe pelo medo e pela superioridade material.
+      <div className="py-16 md:py-24 px-8 md:px-16 lg:px-24">
+        <div className="col-prose mb-16">
+          <p className="text-body text-parchment/60 text-xl leading-relaxed">
+            O conceito de <strong>Soft Power</strong>, cunhado por Joseph Nye, define a capacidade de uma nação de influenciar 
+            através da cultura e de valores, em vez da força militar. Maiakovski entendeu isso décadas antes.
           </p>
         </div>
-        <div className="mb-20">
-          <h3 className="text-display text-display-sm text-parchment mb-6 uppercase tracking-tighter">Soft Power</h3>
-          <p className="text-label text-gold mb-4">PODER BRANDO / SEDUCAO</p>
-          <p className="text-body text-parchment/60 leading-relaxed">
-            Cultura, valores e ideologia. Conquista de coracoes e mentes atraves da admiracao. 
-            Hollywood, a musica e a moda como ferramentas de hegemonia invisivel.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 mb-24">
+          <div>
+            <span className="text-label text-soviet-light block mb-4">MÁQUINA SOVIÉTICA</span>
+            <h3 className="text-display text-2xl md:text-3xl text-parchment mb-6">A Vanguarda como Exportação</h3>
+            <p className="text-body text-parchment/50">A URSS tentou usar o construtivismo e o futurismo para mostrar ao mundo uma imagem de modernidade radical e igualdade técnica.</p>
+          </div>
+          <div>
+            <span className="text-label text-usa-light block mb-4">MÁQUINA AMERICANA</span>
+            <h3 className="text-display text-2xl md:text-3xl text-parchment mb-6">O Espetáculo como Dominação</h3>
+            <p className="text-body text-parchment/50">Os EUA consolidaram sua hegemonia através do consumo e do entretenimento, transformando o "sonho americano" no produto mais exportado do mundo.</p>
+          </div>
         </div>
       </div>
-
-      <div className="py-24 px-8 md:px-16 lg:px-24 section-dark">
-        <span className="text-label text-gold block mb-6">REPRODUCAO CULTURAL</span>
-        <h3 className="text-display text-display-size text-parchment mb-12">Bad Bunny<br />no Super Bowl</h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-start">
-          <div className="space-y-6">
-            <p className="text-body text-parchment/70 text-lg leading-relaxed">
-              <strong className="text-parchment font-medium">Manifesto Anticolonial:</strong> 
-              Bad Bunny transformou o maior palco do imperio americano em um grito de resistencia. 
-              Ao cantar em espanhol e elevar a bandeira de Porto Rico, ele subverte a logica do Soft Power tradicional.
-            </p>
-            <p className="text-body text-parchment/70 text-lg leading-relaxed">
-              <strong className="text-parchment font-medium">Paralelo Historico:</strong> 
-              Assim como Maiakovski usou as formas do futurismo para criticar a burocracia, 
-              artistas contemporaneos usam a plataforma do colonizador para injetar mensagens de autonomia.
-            </p>
+      <div className="py-16 md:py-24 px-8 md:px-16 lg:px-24 section-mid">
+        <span className="text-label text-gold block mb-6">PARALELO MODERNO</span>
+        <h3 className="text-display text-display-size text-parchment mb-12">Bad Bunny no<br />Super Bowl</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+          <div className="col-prose">
+            <p className="text-body text-parchment/70 mb-6 font-medium text-lg">A Resistência dentro do Império.</p>
+            <p className="text-body text-parchment/50 mb-6">Assim como Maiakovski usava as plataformas do Estado Soviético para inserir críticas à burocracia, artistas contemporâneos usam as maiores vitrines do capitalismo para pautas de resistência.</p>
+            <p className="text-body text-parchment/50">Quando Bad Bunny se apresenta no Super Bowl — o ápice do espetáculo americano — cantando em espanhol e celebrando a cultura latina, ele opera uma subversão do Soft Power de dentro para fora.</p>
           </div>
-          <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-parchment/10">
+          <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-parchment/10 bg-black">
             <iframe 
               width="100%" 
               height="100%" 
               src="https://www.youtube.com/embed/v3ErJX_glEs" 
               title="Bad Bunny Super Bowl" 
               frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen
-            ></iframe>
+            />
           </div>
-        </div>
-        <motion.div className="max-w-3xl mx-auto text-center border-t border-parchment/10 pt-16" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-          <p className="text-display text-display-sm text-parchment/60 leading-tight italic">
-            &quot;O capitalismo contemporaneo consegue cooptar a critica que o stalinismo reprimiu?&quot;
-          </p>
-        </motion.div>
-      </div>
-
-      <div className="py-24 px-8 md:px-16 lg:px-24">
-        <span className="text-label text-gold block mb-6">LICOES</span>
-        <div className="space-y-16 mt-12">
-          <div><span className="text-[4rem] font-bold leading-none text-parchment/10 block mb-2">01</span><h4 className="text-display text-display-sm text-parchment mb-4">Critica em<br />Duas Frentes</h4><p className="text-body text-parchment/60 max-w-lg">Nao basta atacar o imperio inimigo externo. E preciso vigiar o proprio campo. Maiakovski criticou capitalismo E stalinismo.</p></div>
-          <div><span className="text-[4rem] font-bold leading-none text-parchment/10 block mb-2">02</span><h4 className="text-display text-display-sm text-parchment mb-4">Soft Power<br />e Insidioso</h4><p className="text-body text-parchment/60 max-w-lg">Imperialismo cultural e mais dificil de combater que imperialismo militar porque seduz. Brooklyn Bridge e linda — mas construida com sangue.</p></div>
-          <div><span className="text-[4rem] font-bold leading-none text-parchment/10 block mb-2">03</span><h4 className="text-display text-display-sm text-parchment mb-4">Estruturas<br />Mudam de Nome</h4><p className="text-body text-parchment/60 max-w-lg">Opressao se adapta e sobrevive mudando de roupagem. Nomes mudam, hierarquias permanecem.</p></div>
         </div>
       </div>
     </section>

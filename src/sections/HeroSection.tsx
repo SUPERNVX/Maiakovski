@@ -9,7 +9,6 @@ const HeroSection = () => {
     offset: ["start start", "end start"]
   });
 
-  // Animacao de texto indo para esquerda e direita
   const xLeft = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const xRight = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
@@ -42,7 +41,7 @@ const HeroSection = () => {
               style={{ x: xRight }}
               className="text-display text-[clamp(2.5rem,8vw,10rem)] text-soviet-light leading-[0.8] uppercase whitespace-nowrap"
             >
-              Dois Imperios
+              Dois Impérios
             </motion.h2>
           </div>
 
@@ -51,7 +50,7 @@ const HeroSection = () => {
             <span className="w-1.5 h-1.5 bg-soviet rotate-45" />
             <span className="text-label text-parchment/60 tracking-[0.3em]">Dramaturgo</span>
             <span className="w-1.5 h-1.5 bg-soviet rotate-45" />
-            <span className="text-label text-parchment/60 tracking-[0.3em]">Revolucionario</span>
+            <span className="text-label text-parchment/60 tracking-[0.3em]">Revolucionário</span>
           </div>
         </motion.div>
         

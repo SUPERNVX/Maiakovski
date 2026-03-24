@@ -1,5 +1,6 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
+import { getAssetPath } from "../lib/utils";
 
 interface RostaItem {
   id: string;
@@ -13,7 +14,7 @@ interface RostaItem {
 const rostaPosters: RostaItem[] = [
   {
     id: "frente-batalha",
-    image: "/ROSTA/O%20que%20voc%C3%AA%20fez%20pela%20frente%20de%20batalha.webp",
+    image: getAssetPath("/ROSTA/O%20que%20voc%C3%AA%20fez%20pela%20frente%20de%20batalha.webp"),
     title: "O que você fez pela frente de batalha?",
     officialName: "А что ты сделал для фронта? — ROSTA nº 540",
     meaning: "Um cartaz de cobrança direta. Ele usa a técnica de repetição visual para mostrar diferentes ações (trabalho na fábrica, colheita, doação) que contribuem para o exército. Note o dedo apontado, uma técnica de engajamento que os EUA também usariam no Tio Sam.",
@@ -21,7 +22,7 @@ const rostaPosters: RostaItem[] = [
   },
   {
     id: "historia-operario",
-    image: "/ROSTA/Hist%C3%B3ria%20de%20um%20certo%20oper%C3%A1rio.webp",
+    image: getAssetPath("/ROSTA/Hist%C3%B3ria%20de%20um%20certo%20oper%C3%A1rio.webp"),
     title: "História de um certo operário",
     officialName: "История про одного рабочего",
     meaning: "Este é um exemplo perfeito de narrativa visual. Ele conta a história de um operário que, ao se conscientizar politicamente, deixa de ser explorado e passa a ser o protagonista da construção do país.",
@@ -29,7 +30,7 @@ const rostaPosters: RostaItem[] = [
   },
   {
     id: "nao-beba",
-    image: "/ROSTA/N%C3%A3o%20beba.webp",
+    image: getAssetPath("/ROSTA/N%C3%A3o%20beba.webp"),
     title: "Não beba! (O álcool é o inimigo da produção)",
     officialName: "Не пей!",
     meaning: "Um dos temas recorrentes nas ROSTA era o combate ao alcoolismo, visto como um vício burguês que atrapalhava a produtividade e a saúde do novo homem soviético. O design é agressivo e direto.",
@@ -37,7 +38,7 @@ const rostaPosters: RostaItem[] = [
   },
   {
     id: "campones-mestre",
-    image: "/ROSTA/O%20campon%C3%AAs%20deve%20ser%20o%20mestre%20da%20terra.webp",
+    image: getAssetPath("/ROSTA/O%20campon%C3%AAs%20deve%20ser%20o%20mestre%20da%20terra.webp"),
     title: "O camponês deve ser o mestre da terra",
     officialName: "Крестьянин должен быть хозяином земли",
     meaning: "Este cartaz foca na aliança entre o campo e a cidade. Ele mostra o camponês de forma heroica, segurando ferramentas, com o fundo industrial sugerindo que a terra e as máquinas agora pertencem ao povo.",
@@ -45,15 +46,15 @@ const rostaPosters: RostaItem[] = [
   },
   {
     id: "entente",
-    image: "/ROSTA/A%20Pequena%20e%20a%20Grande%20Entente.webp",
+    image: getAssetPath("/ROSTA/A%20Pequena%20e%20a%20Grande%20Entente.webp"),
     title: "A Pequena e a Grande Entente",
     officialName: "Малая Антанта и Большая Антанта — ROSTA № 583",
-    meaning: "Mayakovsky satiriza as alianças militares europeias. O capitalista tenta unir forças contra a Rússia Soviética, mas todos acabarão na mesma sepultura. O último quadro representa a Revolução Mundial.",
+    meaning: "Maiakovski satiriza as alianças militares europeias. O capitalista tenta unir forças contra a Rússia Soviética, mas todos acabarão na mesma sepultura. O último quadro representa a Revolução Mundial.",
     purpose: "Ridicularizar os inimigos externos e fortalecer a confiança do povo na vitória final do comunismo sobre o capitalismo internacional.",
   },
   {
     id: "comuna",
-    image: "/ROSTA/Os%20Mortos%20da%20Comuna%20de%20Paris.jpg",
+    image: getAssetPath("/ROSTA/Os%20Mortos%20da%20Comuna%20de%20Paris.jpg"),
     title: "Os Mortos da Comuna de Paris",
     officialName: "Мертвецы Парижской Комуны воскресли",
     meaning: "Ligação histórica direta entre a Comuna de Paris (1871) e a Revolução Russa. O soldado de chapéu alto representa o espírito revolucionário que \"ressuscitou\" na Rússia.",
@@ -61,15 +62,15 @@ const rostaPosters: RostaItem[] = [
   },
   {
     id: "eletrificacao",
-    image: "/ROSTA/Acendemos%20sobre%20o%20mundo%20esta%20verdade.jpg",
+    image: getAssetPath("/ROSTA/Acendemos%20sobre%20o%20mundo%20esta%20verdade.jpg"),
     title: "Acendemos sobre o mundo esta verdade",
     officialName: "Мы зажгли над миром истину эту — ROSTA № 742",
-    meaning: "A \"verdade\" soviética se espalha como luz elétrica. O texto rima sobre como as lâmpadas devem iluminar toda a Rússia. Um dos temas favoritos de Mayakovsky: a modernização.",
+    meaning: "A \"verdade\" soviética se espalha como luz elétrica. O texto rima sobre como as lâmpadas devem iluminar toda a Rússia. Um dos temas favoritos de Maiakovski: a modernização.",
     purpose: "Propaganda educacional para convencer a população sobre a importância do plano de eletrificação nacional (Plano GOELRO).",
   },
   {
     id: "frio",
-    image: "/ROSTA/Quer%20vencer%20o%20frio%20,%20Quer%20vencer%20a%20fome.jpg",
+    image: getAssetPath("/ROSTA/Quer%20vencer%20o%20frio%20,%20Quer%20vencer%20a%20fome.jpg"),
     title: "Quer vencer o frio? Quer vencer a fome?",
     officialName: "Хочешь побороть холод? Хочешь побороть голод?",
     meaning: "Clássico de utilidade pública. Frio e fome são monstros e esqueletos. A solução: juntar-se ao grupo de choque de trabalho exemplar.",
@@ -85,8 +86,6 @@ const RostaSection = () => {
     target: scrollRef,
   });
 
-  // Calculamos o deslocamento baseado no número de itens. 
-  // Para 8 itens com largura considerável, -70% ou -75% geralmente funciona bem para mostrar o último card.
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
 
   const getPoster = (id: string | null) => rostaPosters.find((p) => p.id === id) || null;
@@ -147,10 +146,10 @@ const RostaSection = () => {
             transition={{ duration: 0.8 }}
           >
             <span className="text-label text-soviet block mb-2 md:mb-4">JANELAS ROSTA</span>
-            <h2 className="text-display text-2xl md:text-4xl text-ink max-w-2xl uppercase">Cartazes de Agitacao</h2>
+            <h2 className="text-display text-2xl md:text-4xl text-ink max-w-2xl uppercase">Cartazes de Agitação</h2>
             <div className="w-16 md:w-20 h-1 bg-soviet mt-4 mb-4 md:mt-6 md:mb-6" />
             <p className="text-body text-ink/70 max-w-xl text-base md:text-lg leading-relaxed">
-              Legendados por Maiakovski com <strong>rimas simples</strong> para que ate analfabetos entendessem a mensagem de imediato. A arte se tornou acao.
+              Legendados por Maiakovski com <strong>rimas simples</strong> para que até analfabetos entendessem a mensagem de imediato. A arte se tornou ação.
             </p>
           </motion.div>
         </div>
@@ -161,6 +160,7 @@ const RostaSection = () => {
               <motion.div
                 key={poster.id}
                 className="w-[260px] md:w-[380px] flex-none cursor-pointer group shrink-0"
+                style={{ contentVisibility: 'auto', containIntrinsicSize: '380px 500px' }}
                 onClick={() => setExpanded(poster.id)}
               >
                 <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-ink/5 shadow-xl transition-all duration-500 group-hover:shadow-soviet/10">
@@ -180,13 +180,11 @@ const RostaSection = () => {
                 </div>
               </motion.div>
             ))}
-            {/* Espaçador final para garantir que o último card não cole na borda */}
             <div className="w-[100px] flex-none" />
           </motion.div>
         </div>
         
-        {/* Barra de progresso visual */}
-        <div className="absolute bottom-12 left-8 md:left-16 lg:left-24 right-8 md:right-16 lg:right-24 h-px bg-ink/10">
+        <div className="absolute bottom-12 left-8 md:left-16 lg:left-24 right-8 md:right-16 lg:left-24 h-px bg-ink/10">
           <motion.div 
             className="absolute top-0 left-0 h-full bg-soviet" 
             style={{ scaleX: scrollYProgress, originX: 0 }}

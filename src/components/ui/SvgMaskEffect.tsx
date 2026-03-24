@@ -40,7 +40,7 @@ export const MaskContainer = ({
       style={{ backgroundColor: "#3B2417" }}
     >
       <motion.div
-        className="absolute inset-0 flex items-center justify-center z-10 [mask-image:url(/mask.svg)] [mask-repeat:no-repeat] [mask-size:40px]"
+        className="absolute inset-0 flex items-center justify-center z-10 [mask-image:url(/Maiakovski/mask.svg)] [mask-repeat:no-repeat] [mask-size:40px]"
         style={{ backgroundColor: "#1A1410" }}
         animate={{
           maskPosition: `${mousePosition.x - maskSize / 2}px ${mousePosition.y - maskSize / 2}px`,
