@@ -3,12 +3,11 @@ export function cn(...classes: (string | undefined | false | null)[]) {
 }
 
 /**
- * Returns the absolute path for an asset, prepending the base path if necessary.
- * Useful for GitHub Pages deployment.
+ * Returns the relative path for an asset.
+ * Works well for GitHub Pages by avoiding absolute path issues.
  */
 export function getAssetPath(path: string) {
-  const base = "/Maiakovski/";
-  // Remove leading slash if present to avoid double slashes
+  // Remove leading slash if present and prepend ./
   const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${base}${normalizedPath}`;
+  return `./${normalizedPath}`;
 }

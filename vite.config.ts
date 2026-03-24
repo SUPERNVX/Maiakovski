@@ -4,5 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/Maiakovski/',
+  base: './', // Use relative paths for assets to work correctly everywhere
 })
